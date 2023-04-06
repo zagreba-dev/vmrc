@@ -35,6 +35,10 @@ class SignUpWithEmailAndPasswordFailure implements Exception {
         return const SignUpWithEmailAndPasswordFailure(
           'Please enter a stronger password.',
         );
+      case 'network-request-failed':
+        return const SignUpWithEmailAndPasswordFailure(
+          'A network error (such as timeout, interrupted connection or unreachable host) has occurred.',
+        );
       default:
         return const SignUpWithEmailAndPasswordFailure();
     }
