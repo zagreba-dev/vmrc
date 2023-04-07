@@ -51,7 +51,10 @@ class SignUpPageModel extends ChangeNotifier {
 
   void passwordChanged(String value) {
     final password = Password.dirty(value);
+    final confirmedPassword = ConfirmedPassword.dirty(
+        password: password.value, value: _state.confirmedPassword.value);
     _state.password = password;
+    _state.confirmedPassword = confirmedPassword;
     _state.validateStatus = Formz.validate([
       _state.email,
       password,
@@ -61,7 +64,8 @@ class SignUpPageModel extends ChangeNotifier {
   }
 
   void confirmedPasswordChanged(String value) {
-    final confirmedPassword = ConfirmedPassword.dirty(value);
+    final confirmedPassword =
+        ConfirmedPassword.dirty(password: _state.password.value, value: value);
     _state.confirmedPassword = confirmedPassword;
     _state.validateStatus = Formz.validate([
       _state.email,
