@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 import 'package:vmrc/email.dart';
 import 'package:vmrc/models/sign_up_page_model.dart';
 import 'package:vmrc/password.dart';
@@ -33,17 +34,28 @@ class SignUpForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _EmailInput(),
-          //const SizedBox(height: 8),
-          _PasswordInput(),
-          //const SizedBox(height: 8),
-          _ConfirmPasswordInput(),
-          //const SizedBox(height: 8),
-          _SignUpButton(),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _EmailInput(),
+            //const SizedBox(height: 8),
+            _PasswordInput(),
+            //const SizedBox(height: 8),
+            _ConfirmPasswordInput(),
+            //const SizedBox(height: 8),
+            _SignUpButton(),
+            Selector<SignUpPageModel, bool>(
+                selector: (_, model) =>
+                    model.state.status == FormzStatus.submissionFailure,
+                builder: (_, data, __) {
+                  return SnackBarLauncher(
+                    error: context.read<SignUpPageModel>().state.errorMessage,
+                    toShow: data,
+                  );
+                }),
+          ],
+        ),
       ),
     );
   }
@@ -57,7 +69,6 @@ class _EmailInput extends StatelessWidget {
         builder: (_, data, __) {
           print('build email $data');
           return TextField(
-            //key: const Key('signUpForm_emailInput_textField'),
             onChanged: (email) =>
                 context.read<SignUpPageModel>().emailChanged(email),
             keyboardType: TextInputType.emailAddress,
@@ -83,7 +94,6 @@ class _PasswordInput extends StatelessWidget {
         builder: (_, data, __) {
           print('build password $data');
           return TextField(
-            //key: const Key('signUpForm_passwordInput_textField'),
             onChanged: (password) =>
                 context.read<SignUpPageModel>().passwordChanged(password),
             obscureText: true,
@@ -117,9 +127,6 @@ class _ConfirmPasswordInput extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'Confirm your password',
               helperText: '',
-              //errorText: state.confirmedPassword.invalid
-              //   ? 'passwords do not match'
-              //   : null,
             ),
           );
         });
@@ -129,22 +136,19 @@ class _ConfirmPasswordInput extends StatelessWidget {
 class _SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //return state.status.isSubmissionInProgress
-    return Selector<SignUpPageModel, FormzStatus>(
-        selector: (_, model) => model.state.status,
+    return Selector<SignUpPageModel, Tuple2<FormzStatus, bool>>(
+        selector: (_, model) =>
+            Tuple2(model.state.status, model.state.validateStatus),
         builder: (_, data, __) {
-          print('build password $data');
-          return false
+          print('build button $data');
+          return data.item1 == FormzStatus.submissionInProgress
               ? const CircularProgressIndicator()
               : ElevatedButton(
                   key: const Key('signUpForm_continue_raisedButton'),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
                   ),
-                  onPressed: context
-                          .watch<SignUpPageModel>()
-                          .state
-                          .validateStatus
+                  onPressed: data.item2
                       ? () =>
                           context.read<SignUpPageModel>().signUpFormSubmitted()
                       : null,
@@ -154,5 +158,28 @@ class _SignUpButton extends StatelessWidget {
                   ),
                 );
         });
+  }
+}
+
+class SnackBarLauncher extends StatelessWidget {
+  final String? error;
+  final bool toShow;
+
+  const SnackBarLauncher({required this.error, this.toShow = false, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    if (toShow) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _displaySnackBar(context));
+    }
+    // Placeholder container widget
+    return Container();
+  }
+
+  void _displaySnackBar(BuildContext context) {
+    final snackBar = SnackBar(content: Text(error ?? 'Sign Up Failure'));
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
