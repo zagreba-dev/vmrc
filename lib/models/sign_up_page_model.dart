@@ -6,7 +6,7 @@ import 'package:vmrc/repositories/auth_repository.dart';
 import 'package:formz/formz.dart';
 
 enum FormzStatus {
-  pure,
+  submissionInitial,
   submissionInProgress,
   submissionSuccess,
   submissionFailure
@@ -17,7 +17,7 @@ class SignUpState {
     this.email = const Email.pure(),
     this.password = const Password.pure(),
     this.confirmedPassword = const ConfirmedPassword.pure(),
-    this.status = FormzStatus.pure,
+    this.status = FormzStatus.submissionInitial,
     this.validateStatus = false,
     this.errorMessage,
   });
@@ -73,6 +73,7 @@ class SignUpPageModel extends ChangeNotifier {
 
   Future<void> signUpFormSubmitted() async {
     if (!_state.validateStatus) return;
+    _state.errorMessage = null;
     _state.status = FormzStatus.submissionInProgress;
     notifyListeners();
     try {
@@ -83,7 +84,6 @@ class SignUpPageModel extends ChangeNotifier {
       _state.status = FormzStatus.submissionSuccess;
       notifyListeners();
     } on SignUpWithEmailAndPasswordFailure catch (e) {
-      print(e.message);
       _state.errorMessage = e.message;
       _state.status = FormzStatus.submissionFailure;
       notifyListeners();
