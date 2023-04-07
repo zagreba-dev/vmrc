@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
+import 'package:vmrc/confirmed_password.dart';
 import 'package:vmrc/email.dart';
 import 'package:vmrc/models/sign_up_page_model.dart';
 import 'package:vmrc/password.dart';
@@ -96,7 +97,7 @@ class _PasswordInput extends StatelessWidget {
           return TextField(
             onChanged: (password) =>
                 context.read<SignUpPageModel>().passwordChanged(password),
-            obscureText: true,
+            //obscureText: true,
             decoration: InputDecoration(
               hintText: 'Enter your password',
               helperText: '',
@@ -123,10 +124,18 @@ class _ConfirmPasswordInput extends StatelessWidget {
             onChanged: (confirmPassword) => context
                 .read<SignUpPageModel>()
                 .confirmedPasswordChanged(confirmPassword),
-            obscureText: true,
+            //obscureText: true,
             decoration: InputDecoration(
               hintText: 'Confirm your password',
               helperText: '',
+              errorText: context
+                          .read<SignUpPageModel>()
+                          .state
+                          .confirmedPassword
+                          .displayError ==
+                      ConfirmedPasswordValidationError.invalid
+                  ? 'passwords do not match'
+                  : null,
             ),
           );
         });
