@@ -39,12 +39,13 @@ class SignUpForm extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const SizedBox(height: 8),
             _EmailInput(),
-            //const SizedBox(height: 8),
+            const SizedBox(height: 8),
             _PasswordInput(),
-            //const SizedBox(height: 8),
+            const SizedBox(height: 8),
             _ConfirmPasswordInput(),
-            //const SizedBox(height: 8),
+            const SizedBox(height: 8),
             _SignUpButton(),
             Selector<SignUpPageModel, bool>(
                 selector: (_, model) =>
@@ -73,6 +74,7 @@ class _EmailInput extends StatelessWidget {
             onChanged: (email) =>
                 context.read<SignUpPageModel>().emailChanged(email),
             keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
               hintText: 'Enter your email',
               helperText: '',
@@ -97,6 +99,7 @@ class _PasswordInput extends StatelessWidget {
           return TextField(
             onChanged: (password) =>
                 context.read<SignUpPageModel>().passwordChanged(password),
+            textInputAction: TextInputAction.next,
             //obscureText: true,
             decoration: InputDecoration(
               hintText: 'Enter your password',
