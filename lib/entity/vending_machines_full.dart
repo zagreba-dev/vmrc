@@ -1,4 +1,4 @@
-import 'package:vmrc/vending_machines_short.dart';
+import 'package:vmrc/entity/vending_machines_short.dart';
 
 class VendingMachineFull extends VendingMachineShort {
   final int balance;

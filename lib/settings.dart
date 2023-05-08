@@ -7,10 +7,10 @@ class DbSettings {
 }
 
 class TextInputDecoration {
-  static const hintDepositText = 'Enter your deposit';
+  static const hintDeposit = 'Enter your deposit';
   static const iconDepositInput = Icon(Icons.account_balance);
   static const validatorDepositText = 'Please enter some deposit';
-  static const hintPriceText = 'Enter your price';
+  static const hintPrice = 'Enter your price';
   static const iconPriceInput = Icon(Icons.price_change);
   static const validatorPriceText = 'Please enter some price';
 }
@@ -24,9 +24,9 @@ class AppTextStyle {
 }
 
 class NameLines {
-  static const idPrefix = 'ID: ';
-  static const locationPrefix = 'Location: ';
-  static const subtitle2Prefix = 'Bill acceptor full: ';
+  static const idPrefix = 'ID:';
+  static const locationPrefix = 'Location:';
+  static const subtitle2Prefix = 'Bill acceptor full:';
   static const price = 'PRICE';
   static const priceSuffix = 'grn/L';
   static const balance = 'BALANCE';

@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:vmrc/widgets/pages/login_page_widget.dart';
-import 'package:vmrc/widgets/pages/home_page_widget.dart';
+import 'package:vmrc/ui/sign_in_screen.dart';
+import 'package:vmrc/ui/vending_machines_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +34,9 @@ class MyApp extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               }
-            }));
+            }
+        )
+      );
   }
 }
 
@@ -51,10 +53,11 @@ class MainPageWidget extends StatelessWidget {
           } else if (snapshot.hasError) {
             return const Center(child: Text('Something went wrong'));
           } else if (snapshot.hasData) {
-            return const MyHomePageWidgets();
+            return const VendingMachinesScreen();
           } else {
-            return const LoginPageWidget();
+            return const SignInScreen();
           }
-        });
+        }
+      );
   }
 }

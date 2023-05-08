@@ -74,7 +74,8 @@ class SignInPageModel extends ChangeNotifier {
       _state.errorMessage = e.message;
       _state.status = FormzStatus.submissionFailure;
       notifyListeners();
-    } catch (_) {
+    } catch (error) {
+      print('..........................$error');
       _state.status = FormzStatus.submissionFailure;
       notifyListeners();
     }
